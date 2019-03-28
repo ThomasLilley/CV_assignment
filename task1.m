@@ -8,9 +8,9 @@ AGT = imread('ISIC_0000416_Segmentation.png');
 BGT = imread('ISIC_0011210_Segmentation.png');
 CGT = imread('ISIC_0011357_Segmentation.png');
 % Create variables for segmentation
-AS = A;
-BS = B;
-CS = C;
+AS = rgb2gray(A);
+BS = rgb2gray(B);
+CS = rgb2gray(C);
 
 % create arrays for segmented and ground truth images to 
 % reduce code repetition
@@ -21,12 +21,21 @@ diceScore = {0.0, 0.0, 0.0};
 for i = 1:3
     currIm = segArr{i};
     % Create grayscale images for segmentation
-    currIm = rgb2gray(currIm);
+    
     % ~ = invert
+    %currIm = ~imbinarize(currIm, 0.5);
+    %currIm = bwareafilt(currIm,1);
+    %segArr{i} = currIm;
+    
+    [L,Centers] = imsegkmeans(currIm,2);
+    currIm = labeloverlay(currIm, L);
+    
+    % ~ = invert
+    currIm = rgb2gray(currIm);
     currIm = ~imbinarize(currIm, 0.5);
     currIm = bwareafilt(currIm,1);
-    segArr{i} = currIm;
     
+    segArr{i} = ~currIm;
     % diceScore = dice(img, groundTruthImg) im to double 
     currIm = im2double(currIm);
     gtArr{i} = im2double(gtArr{i});
