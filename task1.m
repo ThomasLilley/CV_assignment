@@ -27,15 +27,15 @@ for i = 1:3
     %currIm = bwareafilt(currIm,1);
     %segArr{i} = currIm;
     
-    [L,Centers] = imsegkmeans(currIm,2);
-    currIm = labeloverlay(currIm, L);
+    %[L,Centers] = imsegkmeans(currIm,2);
+    %currIm = labeloverlay(currIm, L);
     
     % ~ = invert
-    currIm = rgb2gray(currIm);
+    % currIm = rgb2gray(currIm);
     currIm = ~imbinarize(currIm, 0.5);
     currIm = bwareafilt(currIm,1);
     
-    segArr{i} = ~currIm;
+    segArr{i} = currIm;
     % diceScore = dice(img, groundTruthImg) im to double 
     currIm = im2double(currIm);
     gtArr{i} = im2double(gtArr{i});
