@@ -5,7 +5,7 @@ y = csvread('y.csv');
 a = csvread('a.csv');
 b = csvread('b.csv');
 
-z = [a,b];
+z = [a;b];
 
 % Track a target with a Kalman filter
 % z: observation vector
@@ -38,22 +38,25 @@ hold;
 plot(px, py, '+r')
 
 
+% for i = 1:100
+%     c(i) = a(i) - px(i);
+%     d(i) = b(i) - py(i);
+% end
+% e0 = c + d;
+% [f0, fn] = sumsqr(e0);
+% f1 = f0/fn;
+% f2 = sqrt(f1);
+% disp(f2)
+
 for i = 1:100
-    c(i) = a(i) - px(i);
-    d(i) = b(i) - py(i);
-end
-
-[s0, nx] = sumsqr(c);
-s1 = s0/nx;
-s2 = sqrt(s1);
-
-[t0, nx] = sumsqr(d);
-t1 = t0/nx;
-t2 = sqrt(t1);
-
-disp({'RMSE X', s2});
-disp({'RMSE Y', t2});
+    errx(i) = ((px(i) - a(i)).^2);
+    erry(i) = ((py(i) - b(i)).^2);
+    err(i) = sqrt(errx(i) + erry(i));
 
 end
+
+meanerr = mean(err)
+stdev = std2(err)
+rmse = rms(err)
 
 
